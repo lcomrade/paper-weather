@@ -1,0 +1,58 @@
+[en_US_main]
+api_lang = en
+
+[en_US]
+temp_label = Temperature
+feels_like_label = Feels like
+
+wind_speed_label = Wind speed
+wind_direction_label = Wind direction
+
+clouds_all_label = Cloudiness
+
+sunrise_label = Sunrise
+sunset_label = Sunset
+
+pressure_label = Pressure
+humidity_label = Humidity
+
+settings_button = edit
+update_info_button = refresh
+update_forecast_button = forecast
+
+
+[en_US_settings]
+local_label = Localization
+lang_label = Language
+units_label = Units
+
+api_token_label = API token
+city_name_label = City name
+
+save_button = apply
+
+
+[en_US_week]
+monday = Monday
+tuesday = Tuesday
+wednesday = Wednesday
+thursday = Thursday
+friday = Friday
+saturday = Saturday
+sunday = Sunday
+
+
+[en_US_units]
+main_units_standard = K
+main_units_metric = °C
+main_units_imperial = °F
+
+wind_units_standard = m/s
+wind_units_metric = m/s
+wind_units_imperial = mph
+
+pressure_units = hPa
+
+
+[en_US_statuses]
+last_update_status = Last update:

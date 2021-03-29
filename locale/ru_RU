@@ -1,0 +1,58 @@
+[ru_RU_main]
+api_lang = ru
+
+[ru_RU]
+temp_label = Температура
+feels_like_label = Ощущается как
+
+wind_speed_label = Скорость ветра
+wind_direction_label = Направление ветра
+
+clouds_all_label = Облачность
+
+sunrise_label = Восход солнца
+sunset_label = Закат солнца
+
+pressure_label = Давление
+humidity_label = Влажность
+
+settings_button = изменить
+update_info_button = обновить
+update_forecast_button = прогноз
+
+
+[ru_RU_settings]
+local_label = Локализация
+lang_label = Язык
+units_label = Единицы измерения
+
+api_token_label = API токен
+city_name_label = Название города
+
+save_button = применить
+
+
+[ru_RU_week]
+monday = Понедельник
+tuesday = Вторник
+wednesday = Среда
+thursday = Четверг
+friday = Пятница
+saturday = Суббота
+sunday = Воскресенье
+
+
+[ru_RU_units]
+main_units_standard = K
+main_units_metric = °C
+main_units_imperial = °F
+
+wind_units_standard = м/с
+wind_units_metric = м/с
+wind_units_imperial = миля/ч
+
+pressure_units = гПа
+
+
+[ru_RU_statuses]
+last_update_status = Последнее обновление:
