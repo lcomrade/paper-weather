@@ -24,7 +24,7 @@ See /usr/share/common-licenses/GPL-3, or
 of the GNU General Public License.
 """
 
-# Deps: python3, python3-tk, python3-requests
+# Dependencies: python3, python3-tk, python3-requests
 from tkinter import *
 from tkinter.ttk import Combobox
 from tkinter.ttk import Entry
@@ -75,18 +75,19 @@ def launch_flag_parser():
     parser = argparse.ArgumentParser(prog=argv[0])
     parser.add_argument ("-v", "--version", action="version", help ="output version information", version=app_name+" "+version)
 
-    parser.add_argument("--hide-settings", action="store_const", const=True, help="hide settings button")
+    parser.add_argument("--hide-settings", action="store_const", const=True, help="hide edit (settings) button")
     parser.add_argument("--hide-refresh", action="store_const", const=True, help="hide refresh button")
     parser.add_argument("--hide-forecast", action="store_const", const=True, help="hide forecast button")
     parser.add_argument("--hide-forecast-refresh", action="store_const", const=True, help="hide forecast refresh button")
+    parser.add_argument("--hide-buttons", action="store_const", const=True, help="hide all buttons")
 
     parser.add_argument("--settings-at-start", action="store_const", const=True, help="open settings window at start")
     parser.add_argument("--forecast-at-start", action="store_const", const=True, help="open forecast window at start")
 
-    parser.add_argument("--update-frequency", type=int, default=450000, help="set weather info update frequency")
+    parser.add_argument("-u", "--update-frequency", type=int, default=450000, help="set weather info update frequency")
 
-    parser.add_argument("--on-top", action="store_const", default=False, const=True, help="place window on top")
-    parser.add_argument("--start-minimized", action="store_const", const=True, help="start main window minimized")
+    parser.add_argument("-t", "--on-top", action="store_const", default=False, const=True, help="place window on top")
+    parser.add_argument("-m", "--start-minimized", action="store_const", const=True, help="start main window minimized")
     return parser.parse_args()
 
 
@@ -216,11 +217,11 @@ def save_config(event):
 
     try:
         if window.state() == "normal":
-            if arguments.hide_settings != True:
+            if arguments.hide_settings != True and arguments.hide_buttons != True:
                 settings_button.configure(text=locale_settings_button)
-            if arguments.hide_refresh != True:
+            if arguments.hide_refresh != True and arguments.hide_buttons != True:
                 update_info_button.configure(text=locale_update_info_button)
-            if arguments.hide_forecast_refresh != True:
+            if arguments.hide_forecast_refresh != True and arguments.hide_buttons != True:
                 update_forecast_button.configure(text=locale_update_forecast_button)
             print("Updating whether...")
             update_weather()
@@ -462,7 +463,7 @@ def forecast_window(event=None):
 
 
 
-    if arguments.hide_forecast_refresh != True:
+    if arguments.hide_forecast_refresh != True and arguments.hide_buttons != True:
         forecast_update_button = Label(forecast, text=locale_update_info_button, font=ui_font, fg="blue", cursor="hand2")
         forecast_update_button.bind("<Button-1>", forecast_update)
         forecast_update_button.grid(row=1, column=0, padx=4, pady=pad_y)
@@ -796,17 +797,17 @@ humidity_label = Label(window, text=locale_humidity_label, font=ui_font)
 humidity_label.grid(row=16, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
 
 
-if arguments.hide_settings != True:
+if arguments.hide_settings != True and arguments.hide_buttons != True:
     settings_button = Label(window, text=locale_settings_button, font=ui_font, fg="black", cursor="hand2")
     settings_button.bind("<Button-1>", settings_window)
     settings_button.grid(row=18, column=2, padx=4, pady=pad_y)
 
-if arguments.hide_refresh != True:
+if arguments.hide_refresh != True and arguments.hide_buttons != True:
     update_info_button = Label(window, text=locale_update_info_button, font=ui_font, fg="blue", cursor="hand2")
     update_info_button.bind("<Button-1>", update_weather)
     update_info_button.grid(row=18, column=0, padx=4, pady=pad_y)
 
-if arguments.hide_forecast != True:
+if arguments.hide_forecast != True and arguments.hide_buttons != True:
     update_forecast_button = Label(window, text=locale_update_forecast_button, font=ui_font, fg="blue", cursor="hand2")
     update_forecast_button.bind("<Button-1>", forecast_window)
     update_forecast_button.grid(row=18, column=1, padx=4, pady=pad_y)
