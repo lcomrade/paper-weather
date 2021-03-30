@@ -1,5 +1,9 @@
 # Paper Weather
-Simple app to show weather and forecasts using the OpenWeather api
+![](https://github.com/lcomrade/paper-weather/wiki/screenshots/all_layering_i3_en.png)
+
+Simple app to show weather and forecasts using the OpenWeather api.
+
+You can find more screenshots and useful things on the [Wiki](https://github.com/lcomrade/paper-weather/wiki).
 
 # Full list of features
 - Shows the current weather
