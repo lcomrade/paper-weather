@@ -29,6 +29,7 @@ from tkinter import *
 from tkinter.ttk import Combobox
 from tkinter.ttk import Entry
 from tkinter.ttk import Frame, Notebook
+from tkinter import messagebox
 
 import configparser
 import argparse
@@ -43,7 +44,7 @@ from datetime import datetime
 from datetime import timedelta
 
 # Base variables
-version = "1.0"
+version = "1.1"
 app_name = "Paper Weather"
 
 
@@ -65,6 +66,7 @@ date_time_format_mini="%H:%M"
 window = Tk()
 #window.geometry("400x250")
 window.title(app_name)
+#print(window["bg"])
 
 
 
@@ -93,8 +95,9 @@ def launch_flag_parser():
 
 ## Exit on error
 def exit_on_error(error_text, exit_code=1):
-    print("ERROER:", error_text)
+    print("ERROR:", error_text)
     print("Exit code:", exit_code)
+    messagebox.showerror(app_name+" - Error", error_text+"\nExit code: "+str(exit_code))
     exit(exit_code)
 
 ## Set status in the bottom corner
@@ -186,13 +189,11 @@ def add_empty_label(label_row, label_column=0, label_window=window):
 
 ## Save config
 def save_config(event):
-    try:
+    if not config.has_section("local"):
         config.add_section("local")
+    if not config.has_section("openweather_api"):
         config.add_section("openweather_api")
-    except configparser.DuplicateSectionError:
-        pass
-    except:
-        settings_status_label.configure(text="cfg error: failed create section")
+
 
     config.set("local", "lang", lang_combobox.get())
     config.set("local", "units", units_combobox.get())
@@ -301,10 +302,8 @@ def settings_window(event=None):
     city_name_entry.insert(0, openweather_city_name)
     city_name_entry.grid(row=5, column=1, sticky="w", padx=ui_x, pady=pad_y)
 
+    add_empty_label(10)
 
-    global settings_status_label
-    settings_status_label = Label(settings, text="", font=ui_font, fg="red")
-    settings_status_label.grid(row=10, column=0, sticky="w", columnspan=2, padx=4, pady=pad_y)
 
     global save_config_button
     save_config_button = Label(settings, text=locale_save_button, font=ui_font, fg="blue", cursor="hand2")
