@@ -9,6 +9,8 @@ wind_speed_label = Скорость ветра
 wind_direction_label = Направление ветра
 
 clouds_all_label = Облачность
+rain_label = Количество осадков
+snow_label = Количество снега
 
 sunrise_label = Восход солнца
 sunset_label = Закат солнца
@@ -52,6 +54,9 @@ wind_units_metric = м/с
 wind_units_imperial = миля/ч
 
 pressure_units = гПа
+
+millimetre_units = мм
+hour_units = час
 
 
 [ru_RU_statuses]

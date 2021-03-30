@@ -83,7 +83,7 @@ def launch_flag_parser():
     parser.add_argument("--settings-at-start", action="store_const", const=True, help="open settings window at start")
     parser.add_argument("--forecast-at-start", action="store_const", const=True, help="open forecast window at start")
 
-    parser.add_argument("--update-frequency", type=int, default=150000, help="set weather info update frequency")
+    parser.add_argument("--update-frequency", type=int, default=450000, help="set weather info update frequency")
 
     parser.add_argument("--on-top", action="store_const", default=False, const=True, help="place window on top")
     parser.add_argument("--start-minimized", action="store_const", const=True, help="start main window minimized")
@@ -118,7 +118,7 @@ def get_api_json_response(timestamp=0):
     if timestamp == 0:
         print("Getting weather information")
         response = requests.get("https://api.openweathermap.org/data/2.5/weather?q="+openweather_city_name+"&units="+local_units+"&lang="+api_lang+"&appid="+openweather_token)
-    elif timestamp > 0:
+    elif timestamp == 1:
         print("Getting weather forecast")
         response = requests.get("https://api.openweathermap.org/data/2.5/forecast?q="+openweather_city_name+"&units="+local_units+"&lang="+api_lang+"&appid="+openweather_token)
     print("API response status code:", response.status_code)
@@ -148,6 +148,20 @@ def update_info_labels(api_data):
 
     clouds_all_label.configure(text=locale_clouds_all_label+": "+str(api_data["clouds"]["all"])+"%")
 
+    try:
+        rain_label.grid(row=9, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+        rain_label.configure(text=locale_rain_label+": "+str(api_data["rain"]["1h"])+locale_millimetre_units+"/"+locale_hour_units)
+    except:
+        print("No rain information")
+        rain_label.destroy()
+
+    try:
+            snow_label.grid(row=10, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+            snow_label.configure(text=locale_snow_label+": "+str(api_data["snow"]["1h"])+locale_millimetre_units+"/"+locale_hour_units)
+    except:
+            print("No snow information")
+            snow_label.destroy()
+
     sunrise_label.configure(text=locale_sunrise_label+": "+str(unix_time_to_normal(api_data["sys"]["sunrise"], api_data["timezone"])))
     sunset_label.configure(text=locale_sunset_label+": "+str(unix_time_to_normal(api_data["sys"]["sunset"], api_data["timezone"])))
 
@@ -155,10 +169,12 @@ def update_info_labels(api_data):
     humidity_label.configure(text=locale_humidity_label+": "+str(api_data["main"]["humidity"])+"%")
 
 ## Update weather info
-def update_weather(event=None):
+def update_weather(event=None, update_after=False):
     if update_info_labels(get_api_json_response()) != "API_ERROR":
         set_status(locale_last_update_status+" "+str(datetime.now().strftime(date_time_format_mini)), "green")
-    window.after(arguments.update_frequency, update_weather)
+
+    if update_after == True:
+        window.after(arguments.update_frequency, lambda: update_weather(update_after=True))
 
 
 
@@ -534,15 +550,15 @@ def read_config():
     global icon
     if platform.system() == "Linux":
         full_dir_path = os.path.expanduser("~/.config/PaperApps")
-        default_config = "/usr/share/paperweather/default.ini"
-        locale_dir = "/usr/share/paperweather/locale/"
+        default_config = "/usr/share/paper-weather/default.ini"
+        locale_dir = "/usr/share/paper-weather/locale/"
         icon = "/usr/share/pixmaps/paper-weather.png"
 
     elif platform.system() == "Windows":
         full_dir_path = os.environ["APPDATA"]+"/PaperApps"
-        default_config = os.environ["PROGRAMFILES"]+"/paperweather/default.ini"
-        locale_dir = os.environ["PROGRAMFILES"]+"/paperweather/locale/"
-        icon = os.environ["PROGRAMFILES"]+"/paperweather/paper-weather.png"
+        default_config = os.environ["PROGRAMFILES"]+"/paper-weather/default.ini"
+        locale_dir = os.environ["PROGRAMFILES"]+"/paper-weather/locale/"
+        icon = os.environ["PROGRAMFILES"]+"/paper-weather/paper-weather.png"
 
     elif platform.system() == "Darwin" or platform.system() == "Java":
         exit_on_error("unsupported platform: " + platform.system())
@@ -639,6 +655,11 @@ def read_locale():
         global locale_pressure_units
         locale_pressure_units = " "+locale.get(locale_lang+"_units", "pressure_units")
 
+        global locale_millimetre_units
+        locale_millimetre_units = " "+locale.get(locale_lang+"_units", "millimetre_units")
+
+        global locale_hour_units
+        locale_hour_units = locale.get(locale_lang+"_units", "hour_units")
 
         global locale_temp_label
         locale_temp_label = locale.get(locale_lang, "temp_label")
@@ -652,6 +673,12 @@ def read_locale():
 
         global locale_clouds_all_label
         locale_clouds_all_label = locale.get(locale_lang, "clouds_all_label")
+
+        global locale_rain_label
+        locale_rain_label = locale.get(locale_lang, "rain_label")
+
+        global locale_snow_label
+        locale_snow_label = locale.get(locale_lang, "snow_label")
 
         global locale_sunrise_label
         locale_sunrise_label = locale.get(locale_lang, "sunrise_label")
@@ -744,43 +771,49 @@ add_empty_label(7)
 clouds_all_label = Label(window, text=locale_clouds_all_label, font=ui_font)
 clouds_all_label.grid(row=8, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
 
-add_empty_label(9)
+rain_label = Label(window, text=locale_rain_label, font=ui_font)
+#rain_label.grid(row=9, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+
+snow_label = Label(window, text=locale_snow_label, font=ui_font)
+#snow_label.grid(row=10, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+
+add_empty_label(11)
 
 
 sunrise_label = Label(window, text=locale_sunset_label, font=ui_font)
-sunrise_label.grid(row=10, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+sunrise_label.grid(row=12, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
 
 sunset_label = Label(window, text=locale_sunset_label, font=ui_font)
-sunset_label.grid(row=11, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+sunset_label.grid(row=13, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
 
-add_empty_label(12)
+add_empty_label(14)
 
 
 pressure_label = Label(window, text=locale_pressure_label, font=ui_font)
-pressure_label.grid(row=13, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+pressure_label.grid(row=15, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
 
 humidity_label = Label(window, text=locale_humidity_label, font=ui_font)
-humidity_label.grid(row=14, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
+humidity_label.grid(row=16, column=0, sticky="w", columnspan=3, padx=ui_x, pady=pad_y)
 
 
 if arguments.hide_settings != True:
     settings_button = Label(window, text=locale_settings_button, font=ui_font, fg="black", cursor="hand2")
     settings_button.bind("<Button-1>", settings_window)
-    settings_button.grid(row=16, column=2, padx=4, pady=pad_y)
+    settings_button.grid(row=18, column=2, padx=4, pady=pad_y)
 
 if arguments.hide_refresh != True:
     update_info_button = Label(window, text=locale_update_info_button, font=ui_font, fg="blue", cursor="hand2")
     update_info_button.bind("<Button-1>", update_weather)
-    update_info_button.grid(row=16, column=0, padx=4, pady=pad_y)
+    update_info_button.grid(row=18, column=0, padx=4, pady=pad_y)
 
 if arguments.hide_forecast != True:
     update_forecast_button = Label(window, text=locale_update_forecast_button, font=ui_font, fg="blue", cursor="hand2")
     update_forecast_button.bind("<Button-1>", forecast_window)
-    update_forecast_button.grid(row=16, column=1, padx=4, pady=pad_y)
+    update_forecast_button.grid(row=18, column=1, padx=4, pady=pad_y)
 
 
 status_label = Label(window, text="", font=ui_font, fg="red")
-status_label.grid(row=15, column=0, sticky="w", columnspan=3, padx=6, pady=pad_y)
+status_label.grid(row=17, column=0, sticky="w", columnspan=3, padx=6, pady=pad_y)
 
 
 
@@ -802,6 +835,6 @@ if __name__ == "__main__":
         window.after(10, forecast_window)
 
 
-    #update_weather()
-    window.after(50, update_weather)
+    #window.after(50, update_weather)
+    window.after(50, lambda: update_weather(update_after=True))
     window.mainloop()

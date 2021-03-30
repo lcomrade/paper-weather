@@ -9,6 +9,8 @@ wind_speed_label = Wind speed
 wind_direction_label = Wind direction
 
 clouds_all_label = Cloudiness
+rain_label = Rain volume
+snow_label = Snow volume
 
 sunrise_label = Sunrise
 sunset_label = Sunset
@@ -52,6 +54,9 @@ wind_units_metric = m/s
 wind_units_imperial = mph
 
 pressure_units = hPa
+
+millimetre_units = mm
+hour_units = h
 
 
 [en_US_statuses]
