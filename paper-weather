@@ -246,7 +246,7 @@ def settings_window(event=None):
     settings.attributes("-topmost", arguments.on_top)
 
     try:
-        window.iconphoto(True, PhotoImage(file=icon))
+        settings.iconphoto(True, PhotoImage(file=icon))
     except TclError:
         print("WARNING: Failed to load icon "+"'"+icon+"'")
 
@@ -302,7 +302,7 @@ def settings_window(event=None):
     city_name_entry.insert(0, openweather_city_name)
     city_name_entry.grid(row=5, column=1, sticky="w", padx=ui_x, pady=pad_y)
 
-    add_empty_label(10)
+    add_empty_label(10, label_window=settings)
 
 
     global save_config_button
