@@ -245,10 +245,10 @@ def settings_window(event=None):
     settings.resizable(0, 0)
     settings.attributes("-topmost", arguments.on_top)
 
-    try:
-        settings.iconphoto(True, PhotoImage(file=icon))
-    except TclError:
-        print("WARNING: Failed to load icon "+"'"+icon+"'")
+    #try:
+    #    settings.iconphoto(True, PhotoImage(file=icon))
+    #except TclError:
+    #    print("WARNING: Failed to load icon "+"'"+icon+"'")
 
     #settings.geometry("450x300")
     settings.title(app_name+" - Settings")
@@ -417,10 +417,10 @@ def forecast_window(event=None):
     forecast.resizable(0, 0)
     forecast.attributes("-topmost", arguments.on_top)
 
-    try:
-        forecast.iconphoto(True, PhotoImage(file=icon))
-    except TclError:
-        print("WARNING: Failed to load icon "+"'"+icon+"'")
+    #try:
+    #    forecast.iconphoto(True, PhotoImage(file=icon))
+    #except TclError:
+    #    print("WARNING: Failed to load icon "+"'"+icon+"'")
 
 
 
