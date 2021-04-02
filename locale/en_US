@@ -61,3 +61,8 @@ hour_units = h
 
 [en_US_statuses]
 last_update_status = Last update:
+
+
+[en_US_titles]
+settings_title = Settings
+forecast_title = Forecast

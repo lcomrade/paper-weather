@@ -251,7 +251,7 @@ def settings_window(event=None):
     #    print("WARNING: Failed to load icon "+"'"+icon+"'")
 
     #settings.geometry("450x300")
-    settings.title(app_name+" - Settings")
+    settings.title(app_name+" - "+locale_settings_title)
 
     global local_label
     global lang_label
@@ -317,6 +317,8 @@ def settings_window(event=None):
 
 ## Update settings window
 def update_settings_window():
+    settings.title(app_name+" - "+locale_settings_title)
+
     local_label.configure(text=locale_local_label)
     lang_label.configure(text=locale_lang_label)
     units_label.configure(text=locale_units_label)
@@ -413,7 +415,7 @@ def forecast_window(event=None):
         pass
 
     forecast = Tk()
-    forecast.title(app_name+" - Forecast")
+    forecast.title(app_name+" - "+locale_forecast_title)
     forecast.resizable(0, 0)
     forecast.attributes("-topmost", arguments.on_top)
 
@@ -717,6 +719,12 @@ def read_locale():
 
         global locale_last_update_status
         locale_last_update_status = locale.get(locale_lang+"_statuses", "last_update_status")
+
+
+        global locale_settings_title
+        locale_settings_title = locale.get(locale_lang+"_titles", "settings_title")
+        global locale_forecast_title
+        locale_forecast_title = locale.get(locale_lang+"_titles", "forecast_title")
 
 
         global week
