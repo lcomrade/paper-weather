@@ -83,6 +83,8 @@ def launch_flag_parser():
     parser.add_argument("--hide-forecast-refresh", action="store_const", const=True, help="hide forecast refresh button")
     parser.add_argument("--hide-buttons", action="store_const", const=True, help="hide all buttons")
 
+    parser.add_argument("--colorize", action="store_const", const=True, help="colorize text")
+
     parser.add_argument("--settings-at-start", action="store_const", const=True, help="open settings window at start")
     parser.add_argument("--forecast-at-start", action="store_const", const=True, help="open forecast window at start")
 
@@ -179,6 +181,35 @@ def update_weather(event=None, update_after=False):
 
     if update_after == True:
         window.after(arguments.update_frequency, lambda: update_weather(update_after=True))
+
+
+## Color scheme update
+def update_fg(event=None):
+    location_label.configure(fg="grey1")
+    weather_description_label.configure(fg="grey15")
+
+    temp_label.configure(fg="red3")
+    feels_like_label.configure(fg="red3")
+
+    wind_speed_label.configure(fg="RoyalBlue2")
+    wind_direction_label.configure(fg="RoyalBlue2")
+
+    clouds_all_label.configure(fg="DeepSkyBlue3")
+    try:
+        rain_label.configure(fg="DeepSkyBlue3")
+    except:
+        pass
+
+    try:
+        snow_label.configure(fg="DeepSkyBlue3")
+    except:
+        pass
+
+    sunrise_label.configure(fg="orange3")
+    sunset_label.configure(fg="orange3")
+
+    pressure_label.configure(fg="slate blue")
+    humidity_label.configure(fg="slate blue")
 
 
 
@@ -842,6 +873,9 @@ if __name__ == "__main__":
     if arguments.forecast_at_start == True:
         window.after(10, forecast_window)
 
+
+    if arguments.colorize == True:
+        update_fg()
 
     #window.after(50, update_weather)
     window.after(50, lambda: update_weather(update_after=True))
