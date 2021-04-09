@@ -92,6 +92,8 @@ def launch_flag_parser():
 
     parser.add_argument("-t", "--on-top", action="store_const", default=False, const=True, help="place window on top")
     parser.add_argument("-m", "--start-minimized", action="store_const", const=True, help="start main window minimized")
+
+    parser.add_argument("-c", "--config", type=str, default=None, help="path to config file")
     return parser.parse_args()
 
 
@@ -603,7 +605,11 @@ def read_config():
         os.makedirs(full_dir_path)
     except FileExistsError:
         pass
-    config_file = full_dir_path+"/weather.ini"
+
+    if arguments.config != None:
+        config_file = arguments.config
+    else:
+        config_file = full_dir_path+"/weather.ini"
 
 
     if os.path.isfile("default.ini"):
