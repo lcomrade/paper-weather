@@ -93,7 +93,8 @@ def launch_flag_parser():
     parser.add_argument("-t", "--on-top", action="store_const", default=False, const=True, help="place window on top")
     parser.add_argument("-m", "--start-minimized", action="store_const", const=True, help="start main window minimized")
 
-    parser.add_argument("-c", "--config", type=str, default=None, help="path to config file")
+    parser.add_argument("-c", "--config", type=str, default=None, help="config file")
+    parser.add_argument("-l", "--locale-path", type=str, default=None, help="path to locale dir")
     return parser.parse_args()
 
 
@@ -620,8 +621,9 @@ def read_config():
         print("WARNING: default config file not found: 'default.ini'")
         print("WARNING: default config file not found: "+"'"+default_config+"'")
 
-
-    if os.path.exists("locale/"):
+    if arguments.locale_path != None:
+        locale_dir = arguments.locale_path
+    elif os.path.exists("locale/"):
         locale_dir = "locale/"
     elif os.path.exists(locale_dir):
         pass
@@ -673,7 +675,14 @@ def read_locale():
     exist_locales = os.listdir(locale_dir)
     locale = configparser.ConfigParser()
     if locale_lang in exist_locales:
-        locale.read(locale_dir+locale_lang, encoding="utf8")
+        if locale_dir[-1:] == "/":
+            locale_file = locale_dir+locale_lang
+        else:
+            locale_file = locale_dir+"/"+locale_lang
+
+        locale.read(locale_file, encoding="utf8")
+        print("INFO: locale file: "+locale_file)
+
 
         global api_lang
         api_lang = locale.get(locale_lang+"_main", "api_lang")
